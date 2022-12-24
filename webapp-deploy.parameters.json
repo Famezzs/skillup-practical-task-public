@@ -1,0 +1,87 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aspName": {
+            "value": "test-asp00"
+        },
+        "aspResourceGroupName": {
+            "value": "test"
+        },
+        "webappName": {
+            "value": "test-webapp02-asp00"
+        },
+        "webappCurrentStack": {
+            "value": "dotnet"
+        },
+        "webappManagedPipelineMode": {
+            "value": "Classic"
+        },
+        "webappFtpsState": {
+            "value": "Disabled"
+        },
+        "webappWebSocketsEnabled": {
+            "value": false
+        },
+        "webappAlwaysOn": {
+            "value": false
+        },
+        "webappRemoteDebuggingEnabled": {
+            "value": false
+        },
+        "webappMinimumTLSVersion": {
+            "value": "1.1"
+        },
+        "webappClientAffinityEnabled": {
+            "value": false
+        },
+        "webappClientCertificateEnabled": {
+            "value": false
+        },
+        "webappClientCertificateMode": {
+            "value": "Optional"
+        },
+        "webappHttpsOnly": {
+            "value": true
+        },
+        "webappVnetRouteAll": {
+            "value": false
+        },
+        "webappIpRestrictions": {
+            "value": []
+        },
+        "webappNetFrameworkVersion": {
+            "value": "3.1"
+        },
+        "webappJavaVersion": {
+            "value": ""
+        },
+        "webappLinuxFrameworkVersion": {
+            "value": ""
+        },
+        "webappNodeVersion": {
+            "value": ""
+        },
+        "webappPhpVersion": {
+            "value": ""
+        },
+        "webappPythonVersion": {
+            "value": ""
+        },
+        "appInsightsName": {
+            "value": "jawjw49kfks4"
+        },
+        "vnetName": {
+            "value": "test-vnet01"
+        },
+        "vnetResourceGroup": {
+            "value": "test"
+        },
+        "vnetSubnetName": {
+            "value": "test-snet02"
+        },
+        "webappHttp20Enabled": {
+            "value": false
+        }
+    }
+}

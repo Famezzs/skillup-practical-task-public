@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aspTemplateFile": {
+            "type": "string"
+        },
+        "aspTemplateParametersFile": {
+            "type": "string"
+        },
+        "webappTemplateFile": {
+            "type": "string"
+        },
+        "webappTemplateParametersFile": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "aspDeployment",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "relativePath": "[parameters('aspTemplateFile')]"
+                },
+                "parametersLink": {
+                    "relativePath": "[parameters('aspTemplateParametersFile')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "webappDeployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'aspDeployment')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "relativePath": "[parameters('webappTemplateFile')]"
+                },
+                "parametersLink": {
+                    "relativePath": "[parameters('webappTemplateParametersFile')]"
+                }
+            }
+        }
+    ]
+}

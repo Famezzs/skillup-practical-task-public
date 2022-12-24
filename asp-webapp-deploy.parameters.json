@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aspTemplateFile": {
+            "value": "autoscale-asp-deploy.json"
+        },
+        "aspTemplateParametersFile": {
+            "value": "autoscale-asp-deploy.parameters.json"
+        },
+        "webappTemplateFile": {
+            "value": "webapp-deploy.json"
+        },
+        "webappTemplateParametersFile": {
+            "value": "webapp-deploy.parameters.json"
+        }
+    }
+}

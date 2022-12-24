@@ -1,0 +1,175 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aspName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24,
+            "metadata": {
+                "description": "Name of the ASP to associate the web app with."
+            }
+        },
+        "aspResourceGroupName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24,
+            "metadata": {
+                "description": "Name of the resource group where the ASP associated with the web app resides."
+            }
+        },
+        "webappName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24,
+            "metadata": {
+                "description": "A name for a web app."
+            }
+        },
+        "webappCurrentStack": {
+            "type": "string"
+        },
+        "webappManagedPipelineMode": {
+            "type": "string",
+            "allowedValues": [
+                "Classic",
+                "Integrated"
+            ]
+        },
+        "webappFtpsState": {
+            "type": "string",
+            "allowedValues": [
+                "AllAllowed",
+                "FtpsOnly",
+                "Disabled"
+            ]
+        },
+        "webappWebSocketsEnabled": {
+            "type": "bool"
+        },
+        "webappAlwaysOn": {
+            "type": "bool"
+        },
+        "webappRemoteDebuggingEnabled": {
+            "type": "bool"
+        },
+        "webappMinimumTLSVersion": {
+            "type": "string",
+            "allowedValues": [
+                "1.0",
+                "1.1",
+                "1.2"
+            ]
+        },
+        "webappClientAffinityEnabled": {
+            "type": "bool"
+        },
+        "webappClientCertificateEnabled": {
+            "type": "bool"
+        },
+        "webappClientCertificateMode": {
+            "type": "string",
+            "allowedValues": [
+                "Optional",
+                "OptionalInteractiveUser",
+                "Required"
+            ]
+        },
+        "webappHttpsOnly": {
+            "type": "bool"
+        },
+        "webappVnetRouteAll": {
+            "type": "bool"
+        },
+        "webappIpRestrictions": {
+            "type": "array"
+        },
+        "webappLinuxFrameworkVersion": {
+            "type": "string"
+        },
+        "webappJavaVersion": {
+            "type": "string"
+        },
+        "webappNodeVersion": {
+            "type": "string"
+        },
+        "webappPhpVersion": {
+            "type": "string"
+        },
+        "webappPythonVersion": {
+            "type": "string"
+        },
+        "webappNetFrameworkVersion": {
+            "type": "string"
+        },
+        "appInsightsName": {
+            "type": "string"
+        },
+        "vnetName": {
+            "type": "string"
+        },
+        "vnetResourceGroup": {
+            "type": "string"
+        },
+        "vnetSubnetName": {
+            "type": "string"
+        },
+        "webappHttp20Enabled": {
+            "type": "bool"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "name": "[parameters('webappName')]",
+            "apiVersion": "2020-12-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "name": "[parameters('webappName')]",
+                "serverFarmId": "[resourceId(parameters('aspResourceGroupName'), 'Microsoft.Web/serverfarms', parameters('aspName'))]",
+                "siteConfig": {
+                    "managedPipelineMode": "[parameters('webappManagedPipelineMode')]",
+                    "ftpsState": "[parameters('webappFtpsState')]",
+                    "webSocketsEnabled": "[parameters('webappWebSocketsEnabled')]",
+                    "alwaysOn": "[parameters('webappAlwaysOn')]",
+                    "remoteDebuggingEnabled": "[parameters('webappRemoteDebuggingEnabled')]",
+                    "minTlsVersion": "[parameters('webappMinimumTLSVersion')]",
+                    "vnetRouteAllEnabled": "[parameters('webappVnetRouteAll')]",
+                    "appSettings": [
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(
+                                concat('microsoft.insights/components/', parameters('appInsightsName')), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(
+                                concat('microsoft.insights/components/', parameters('appInsightsName')), '2015-05-01').ConnectionString]"
+                        }
+                    ],
+                    "metadata": [
+                        {
+                            "name": "CURRENT_STACK",
+                            "value": "[parameters('webappCurrentStack')]"
+                        }
+                    ],
+                    "ipSecurityRestrictions": "[parameters('webappIpRestrictions')]",
+                    "linuxFxVersion": "[parameters('webappLinuxFrameworkVersion')]",
+                    "netFrameworkVersion": "[parameters('webappNetFrameworkVersion')]",
+                    "javaVersion": "[parameters('webappJavaVersion')]",
+                    "phpVersion": "[parameters('webappPhpVersion')]",
+                    "pythonVersion": "[parameters('webappPythonVersion')]",
+                    "nodeVersion": "[parameters('webappNodeVersion')]",
+                    "http20Enabled": "[parameters('webappHttp20Enabled')]"
+                },
+                "clientAffinityEnabled": "[parameters('webappClientAffinityEnabled')]",
+                "clientCertEnabled": "[parameters('webappClientCertificateEnabled')]",
+                "clientCertMode": "[parameters('webappClientCertificateMode')]",
+                "httpsOnly": "[parameters('webappHttpsOnly')]",
+                "virtualNetworkSubnetId": "[concat(subscription().id, '/resourceGroups/',
+                    parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/',
+                    parameters('vnetName'), '/subnets/', parameters('vnetSubnetName'))]"
+            }
+        }
+    ]
+}
