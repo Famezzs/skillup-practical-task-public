@@ -138,13 +138,19 @@
                     "appSettings": [
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(
-                                concat('microsoft.insights/components/', parameters('appInsightsName')), '2015-05-01').InstrumentationKey]"
+                            "value": "[
+                                if(empty(parameters('appInsightsName')),
+                                json('null'),
+                                reference(concat('microsoft.insights/components/', parameters('appInsightsName')), '2015-05-01').InstrumentationKey)
+                            ]"
                         },
                         {
                             "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(
-                                concat('microsoft.insights/components/', parameters('appInsightsName')), '2015-05-01').ConnectionString]"
+                            "value": "[
+                                if(empty(parameters('appInsightsName')),
+                                json('null'),
+                                reference(concat('microsoft.insights/components/', parameters('appInsightsName')), '2015-05-01').ConnectionString)
+                            ]"
                         }
                     ],
                     "metadata": [
