@@ -5,14 +5,14 @@
         "aspTemplateFile": {
             "value": "autoscale-asp-deploy.json"
         },
-        "aspTemplateParametersFile": {
-            "value": "autoscale-asp-deploy.parameters.json"
+        "aspTemplateParametersFileUri": {
+            "value": "https://raw.githubusercontent.com/Famezzs/skillup-practical-task-public/master/autoscale-asp-deploy.parameters.json"
         },
         "webappTemplateFile": {
             "value": "webapp-deploy.json"
         },
-        "webappTemplateParametersFile": {
-            "value": "webapp-deploy.parameters.json"
+        "webappTemplateParametersFileUri": {
+            "value": "https://raw.githubusercontent.com/Famezzs/skillup-practical-task-public/master/webapp-deploy.parameters.json"
         }
     }
 }

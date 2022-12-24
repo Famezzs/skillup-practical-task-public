@@ -5,13 +5,13 @@
         "aspTemplateFile": {
             "type": "string"
         },
-        "aspTemplateParametersFile": {
+        "aspTemplateParametersFileUri": {
             "type": "string"
         },
         "webappTemplateFile": {
             "type": "string"
         },
-        "webappTemplateParametersFile": {
+        "webappTemplateParametersFileUri": {
             "type": "string"
         }
     },
@@ -26,7 +26,8 @@
                     "relativePath": "[parameters('aspTemplateFile')]"
                 },
                 "parametersLink": {
-                    "relativePath": "[parameters('aspTemplateParametersFile')]"
+                    "uri": "[parameters('aspTemplateParametersFileUri')]",
+                    "contentVersion": "1.0.0.0"
                 }
             }
         },
@@ -43,7 +44,8 @@
                     "relativePath": "[parameters('webappTemplateFile')]"
                 },
                 "parametersLink": {
-                    "relativePath": "[parameters('webappTemplateParametersFile')]"
+                    "uri": "[parameters('webappTemplateParametersFileUri')]",
+                    "contentVersion": "1.0.0.0"
                 }
             }
         }
