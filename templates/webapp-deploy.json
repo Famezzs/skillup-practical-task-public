@@ -26,8 +26,18 @@
                 "description": "A name for a web app."
             }
         },
+        "webappLocation": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for a webapp."
+            }
+        },
         "webappCurrentStack": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Determines the currently running code stack (e.g. dotnet, java, etc.)"
+            }
         },
         "webappManagedPipelineMode": {
             "type": "string",
@@ -62,10 +72,16 @@
             ]
         },
         "webappClientAffinityEnabled": {
-            "type": "bool"
+            "type": "bool",
+            "metadata": {
+                "description": "Determines whether session-affinity cookies are sent. Setting this to 'true' makes client forward data to the same back-end instance in the same session."
+            }
         },
         "webappClientCertificateEnabled": {
-            "type": "bool"
+            "type": "bool",
+            "metadata": {
+                "description": "Setting this to 'true' enables client certificate authentication."
+            }
         },
         "webappClientCertificateMode": {
             "type": "string",
@@ -103,19 +119,41 @@
             "type": "string"
         },
         "appInsightsName": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "If provided, the webapp will be connected to the app insights specified by 'appInsightsName'."
+            }
         },
         "vnetName": {
-            "type": "string"
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24,
+            "metadata": {
+                "description": "Name of the vnet which contains the subnet specified by 'vnetSubnetName' that will be used for vnet integration of the webapp."
+            }
         },
         "vnetResourceGroup": {
-            "type": "string"
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24,
+            "defaultValue": "[resourceGroup().name]",
+            "metadata": {
+                "description": "Specifies the resource group in which the vnet specified by 'vnetName' resides. Default value: the resource group into which the webapp is being deployed."
+            }
         },
         "vnetSubnetName": {
-            "type": "string"
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24,
+            "metadata": {
+                "description": "Specifies the name of subnet which will be used for vnet integration of the webapp being deployed."
+            }
         },
         "webappHttp20Enabled": {
-            "type": "bool"
+            "type": "bool",
+            "metadata": {
+                "description": "Setting this to 'true' enables http 2.0 support."
+            }
         }
     },
     "resources": [
@@ -123,9 +161,8 @@
             "type": "Microsoft.Web/sites",
             "name": "[parameters('webappName')]",
             "apiVersion": "2020-12-01",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('webappLocation')]",
             "properties": {
-                "name": "[parameters('webappName')]",
                 "serverFarmId": "[resourceId(parameters('aspResourceGroupName'), 'Microsoft.Web/serverfarms', parameters('aspName'))]",
                 "siteConfig": {
                     "managedPipelineMode": "[parameters('webappManagedPipelineMode')]",
@@ -172,9 +209,15 @@
                 "clientCertEnabled": "[parameters('webappClientCertificateEnabled')]",
                 "clientCertMode": "[parameters('webappClientCertificateMode')]",
                 "httpsOnly": "[parameters('webappHttpsOnly')]",
-                "virtualNetworkSubnetId": "[concat(subscription().id, '/resourceGroups/',
-                    parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/',
-                    parameters('vnetName'), '/subnets/', parameters('vnetSubnetName'))]"
+                "virtualNetworkSubnetId": "[
+                    if(or(empty(parameters('vnetName')), empty(parameters('vnetSubnetName'))),
+                    json('null'),
+                    concat(
+                        subscription().id, '/resourceGroups/',
+                        parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/',
+                        parameters('vnetName'), '/subnets/', parameters('vnetSubnetName')
+                    ))
+                ]"
             }
         }
     ]

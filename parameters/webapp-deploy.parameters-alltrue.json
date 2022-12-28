@@ -3,19 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "aspName": {
-            "value": "test-asp02"
+            "value": "test-asp01"
         },
         "aspResourceGroupName": {
             "value": "test-rg01"
         },
         "webappName": {
-            "value": "test-wapp02-9f3ed10c-c29"
-        },
-        "webappLocation": {
-            "value": "westeurope"
+            "value": "test-wapp02-9f3ed10c-c30"
         },
         "webappCurrentStack": {
-            "value": ""
+            "value": "dotnet"
         },
         "webappManagedPipelineMode": {
             "value": "Integrated"
@@ -24,13 +21,13 @@
             "value": "AllAllowed"
         },
         "webappWebSocketsEnabled": {
-            "value": false
+            "value": true
         },
         "webappAlwaysOn": {
             "value": true
         },
         "webappRemoteDebuggingEnabled": {
-            "value": false
+            "value": true
         },
         "webappMinimumTLSVersion": {
             "value": "1.2"
@@ -39,7 +36,7 @@
             "value": true
         },
         "webappClientCertificateEnabled": {
-            "value": false
+            "value": true
         },
         "webappClientCertificateMode": {
             "value": "Optional"
@@ -48,19 +45,19 @@
             "value": true
         },
         "webappVnetRouteAll": {
-            "value": false
+            "value": true
         },
         "webappIpRestrictions": {
             "value": []
         },
         "webappNetFrameworkVersion": {
-            "value": ""
+            "value": "6.0"
         },
         "webappJavaVersion": {
             "value": ""
         },
         "webappLinuxFrameworkVersion": {
-            "value": "JAVA|11.0"
+            "value": ""
         },
         "webappNodeVersion": {
             "value": ""
@@ -81,10 +78,10 @@
             "value": "test-rg01"
         },
         "vnetSubnetName": {
-            "value": "test-snet02"
+            "value": "test-snet01"
         },
         "webappHttp20Enabled": {
-            "value": false
+            "value": true
         }
     }
 }

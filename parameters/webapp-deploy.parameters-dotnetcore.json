@@ -11,6 +11,9 @@
         "webappName": {
             "value": "test-wapp01-9f3ed10c-c29"
         },
+        "webappLocation": {
+            "value": "westeurope"
+        },
         "webappCurrentStack": {
             "value": "dotnet"
         },
