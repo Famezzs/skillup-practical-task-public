@@ -44,74 +44,110 @@
         "aspSkuCapacity": {
             "type": "int",
             "metadata": {
-                "description": "The capacity of SKU41 to use for the ASP deployment."
+                "description": "The capacity of SKU to use for the ASP deployment."
             }
         },
         "autoscaleMinimumCapacity": {
-            "type": "int",
+            "type": "string",
             "metadata": {
                 "description": "Minimum instance count for ASP affected by the autoscale."
             }
         },
         "autoscaleMaximumCapacity": {
-            "type": "int",
+            "type": "string",
             "metadata": {
                 "description": "Maximum instance count for ASP affected by the autoscale."
             }
         },
         "autoscaleDefaultCapacity": {
-            "type": "int",
+            "type": "string",
             "metadata": {
                 "description": "Default instance count for ASP affected by the autoscale."
             }
         },
         "memoryRuleTimeWindow": {
             "type": "string",
-            "defaultValue": "PT10M"
+            "defaultValue": "PT10M",
+            "metadata": {
+                "description": "Determines the time window used for evaluating both increase and decrease memory-percentage-triggered rules."
+            }
         },
         "memoryRuleCooldown": {
             "type": "string",
-            "defaultValue": "PT10M"
+            "defaultValue": "PT10M",
+            "metadata": {
+                "description": "Specifies cooldown between the re-evaluation of both memory-percentage-triggered rules."
+            }
         },
         "memoryRuleIncreaseBy": {
-            "type": "int",
-            "defaultValue": 1
+            "type": "string",
+            "defaultValue": "1",
+            "metadata": {
+                "description": "Determines how many instances are added if 'memoryRuleIncreaseThreshold' is reached."
+            }
         },
         "memoryRuleIncreaseThreshold": {
             "type": "int",
-            "defaultValue": 80
+            "defaultValue": 80,
+            "metadata": {
+                "description": "Specifies the percentage of memory usage in a time window specified upon reaching which webapp's instance count should be increased."
+            }
         },
         "memoryRuleDecreaseBy": {
-            "type": "int",
-            "defaultValue": 1
+            "type": "string",
+            "defaultValue": "1",
+            "metadata": {
+                "description": "Determines how many instances are removed if 'memoryRuleDecreaseThreshold' is effectively above the current memory usage in percentage."
+            }
         },
         "memoryRuleDecreaseThreshold": {
             "type": "int",
-            "defaultValue": 60
+            "defaultValue": 60,
+            "metadata": {
+                "description": "Specifies the percentage of memory usage in a time window specified upon falling bellow which webapp's instance count should be decreased."
+            }
         },
         "cpuRuleTimeWindow": {
             "type": "string",
-            "defaultValue": "PT10M"
+            "defaultValue": "PT10M",
+            "metadata": {
+                "description": "Determines the time window used for evaluating both increase and decrease cpu-percentage-triggered rules."
+            }
         },
         "cpuRuleCooldown": {
             "type": "string",
-            "defaultValue": "PT10M"
+            "defaultValue": "PT10M",
+            "metadata": {
+                "description": "Specifies cooldown between the re-evaluation of both cpu-percentage-triggered rules."
+            }
         },
         "cpuRuleIncreaseBy": {
-            "type": "int",
-            "defaultValue": 1
+            "type": "string",
+            "defaultValue": "1",
+            "metadata": {
+                "description": "Determines how many instances are added if 'cpuRuleIncreaseThreshold' is reached."
+            }
         },
         "cpuRuleIncreaseThreshold": {
             "type": "int",
-            "defaultValue": 80
+            "defaultValue": 80,
+            "metadata": {
+                "description": "Specifies the percentage of cpu usage in a time window specified upon reaching which webapp's instance count should be increased."
+            }
         },
         "cpuRuleDecreaseBy": {
-            "type": "int",
-            "defaultValue": 1
+            "type": "string",
+            "defaultValue": "1",
+            "metadata": {
+                "description": "Determines how many instances are removed if 'cpuRuleDecreaseThreshold' is more than current usage."
+            }
         },
         "cpuRuleDecreaseThreshold": {
             "type": "int",
-            "defaultValue": 60
+            "defaultValue": 60,
+            "metadata": {
+                "description": "Specifies the percentage of cpu usage in a time window specified upon falling bellow which webapp's instance count should be decreased."
+            }
         },
         "enableAutoscale": {
             "type": "bool",

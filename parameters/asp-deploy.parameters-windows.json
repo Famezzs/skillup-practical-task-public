@@ -21,13 +21,13 @@
             "value": 1
         },
         "autoscaleMinimumCapacity": {
-            "value": 1
+            "value": "1"
         },
         "autoscaleMaximumCapacity": {
-            "value": 4
+            "value": "4"
         },
         "autoscaleDefaultCapacity": {
-            "value": 1
+            "value": "1"
         },
         "memoryRuleTimeWindow": {
             "value": "PT10M"
@@ -36,13 +36,13 @@
             "value": "PT10M"
         },
         "memoryRuleIncreaseBy": {
-            "value": 1
+            "value": "1"
         },
         "memoryRuleIncreaseThreshold": {
             "value": 80
         },
         "memoryRuleDecreaseBy": {
-            "value": 1
+            "value": "1"
         },
         "memoryRuleDecreaseThreshold": {
             "value": 60
@@ -54,13 +54,13 @@
             "value": "PT10M"
         },
         "cpuRuleIncreaseBy": {
-            "value": 1
+            "value": "1"
         },
         "cpuRuleIncreaseThreshold": {
             "value": 80
         },
         "cpuRuleDecreaseBy": {
-            "value": 1
+            "value": "1"
         },
         "cpuRuleDecreaseThreshold": {
             "value": 60
