@@ -1,0 +1,87 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aspName": {
+            "value": "test-asp02"
+        },
+        "aspResourceGroupName": {
+            "value": "test-rg01"
+        },
+        "webappName": {
+            "value": "test-wapp02-9f3ed10c-c29"
+        },
+        "webappCurrentStack": {
+            "value": "java"
+        },
+        "webappManagedPipelineMode": {
+            "value": "Integrated"
+        },
+        "webappFtpsState": {
+            "value": "AllAllowed"
+        },
+        "webappWebSocketsEnabled": {
+            "value": false
+        },
+        "webappAlwaysOn": {
+            "value": true
+        },
+        "webappRemoteDebuggingEnabled": {
+            "value": false
+        },
+        "webappMinimumTLSVersion": {
+            "value": "1.2"
+        },
+        "webappClientAffinityEnabled": {
+            "value": true
+        },
+        "webappClientCertificateEnabled": {
+            "value": false
+        },
+        "webappClientCertificateMode": {
+            "value": "Optional"
+        },
+        "webappHttpsOnly": {
+            "value": true
+        },
+        "webappVnetRouteAll": {
+            "value": false
+        },
+        "webappIpRestrictions": {
+            "value": []
+        },
+        "webappNetFrameworkVersion": {
+            "value": ""
+        },
+        "webappJavaVersion": {
+            "value": ""
+        },
+        "webappLinuxFrameworkVersion": {
+            "value": ""
+        },
+        "webappNodeVersion": {
+            "value": ""
+        },
+        "webappPhpVersion": {
+            "value": ""
+        },
+        "webappPythonVersion": {
+            "value": ""
+        },
+        "appInsightsName": {
+            "value": "test-appins01"
+        },
+        "vnetName": {
+            "value": "test-vnet01"
+        },
+        "vnetResourceGroup": {
+            "value": "test-rg01"
+        },
+        "vnetSubnetName": {
+            "value": "test-snet02"
+        },
+        "webappHttp20Enabled": {
+            "value": false
+        }
+    }
+}

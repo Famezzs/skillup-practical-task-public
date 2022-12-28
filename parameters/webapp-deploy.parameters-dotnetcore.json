@@ -3,37 +3,37 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "aspName": {
-            "value": "test-asp00"
+            "value": "test-asp01"
         },
         "aspResourceGroupName": {
-            "value": "test"
+            "value": "test-rg01"
         },
         "webappName": {
-            "value": "test-webapp02-asp00"
+            "value": "test-wapp01-9f3ed10c-c29"
         },
         "webappCurrentStack": {
             "value": "dotnet"
         },
         "webappManagedPipelineMode": {
-            "value": "Classic"
+            "value": "Integrated"
         },
         "webappFtpsState": {
-            "value": "Disabled"
+            "value": "AllAllowed"
         },
         "webappWebSocketsEnabled": {
             "value": false
         },
         "webappAlwaysOn": {
-            "value": false
+            "value": true
         },
         "webappRemoteDebuggingEnabled": {
             "value": false
         },
         "webappMinimumTLSVersion": {
-            "value": "1.1"
+            "value": "1.2"
         },
         "webappClientAffinityEnabled": {
-            "value": false
+            "value": true
         },
         "webappClientCertificateEnabled": {
             "value": false
@@ -51,7 +51,7 @@
             "value": []
         },
         "webappNetFrameworkVersion": {
-            "value": "3.1"
+            "value": "6.0"
         },
         "webappJavaVersion": {
             "value": ""
@@ -69,16 +69,16 @@
             "value": ""
         },
         "appInsightsName": {
-            "value": ""
+            "value": "test-appins01"
         },
         "vnetName": {
             "value": "test-vnet01"
         },
         "vnetResourceGroup": {
-            "value": "test"
+            "value": "test-rg01"
         },
         "vnetSubnetName": {
-            "value": "test-snet02"
+            "value": "test-snet01"
         },
         "webappHttp20Enabled": {
             "value": false

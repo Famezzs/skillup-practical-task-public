@@ -1,0 +1,240 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aspName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24,
+            "metadata": {
+                "description": "A name for an ASP."
+            }
+        },
+        "aspKind": {
+            "type": "string",
+            "allowedValues": [
+                "windows",
+                "linux"
+            ]
+        },
+        "aspLocation": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for an ASP."
+            }
+        },
+        "aspSkuName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of SKU to use for the ASP deployment."
+            }
+        },
+        "aspSkuTier": {
+            "type": "string",
+            "defaultValue": "Standard",
+            "allowedValues": [
+                "Standard",
+                "Premium"
+            ],
+            "metadata": {
+                "description": "The pricing tier for the ASP."
+            }
+        },
+        "aspSkuCapacity": {
+            "type": "int",
+            "metadata": {
+                "description": "The capacity of SKU41 to use for the ASP deployment."
+            }
+        },
+        "autoscaleMinimumCapacity": {
+            "type": "int",
+            "metadata": {
+                "description": "Minimum instance count for ASP affected by the autoscale."
+            }
+        },
+        "autoscaleMaximumCapacity": {
+            "type": "int",
+            "metadata": {
+                "description": "Maximum instance count for ASP affected by the autoscale."
+            }
+        },
+        "autoscaleDefaultCapacity": {
+            "type": "int",
+            "metadata": {
+                "description": "Default instance count for ASP affected by the autoscale."
+            }
+        },
+        "memoryRuleTimeWindow": {
+            "type": "string",
+            "defaultValue": "PT10M"
+        },
+        "memoryRuleCooldown": {
+            "type": "string",
+            "defaultValue": "PT10M"
+        },
+        "memoryRuleIncreaseBy": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "memoryRuleIncreaseThreshold": {
+            "type": "int",
+            "defaultValue": 80
+        },
+        "memoryRuleDecreaseBy": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "memoryRuleDecreaseThreshold": {
+            "type": "int",
+            "defaultValue": 60
+        },
+        "cpuRuleTimeWindow": {
+            "type": "string",
+            "defaultValue": "PT10M"
+        },
+        "cpuRuleCooldown": {
+            "type": "string",
+            "defaultValue": "PT10M"
+        },
+        "cpuRuleIncreaseBy": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "cpuRuleIncreaseThreshold": {
+            "type": "int",
+            "defaultValue": 80
+        },
+        "cpuRuleDecreaseBy": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "cpuRuleDecreaseThreshold": {
+            "type": "int",
+            "defaultValue": 60
+        },
+        "enableAutoscale": {
+            "type": "bool",
+            "metadata": {
+                "description": "Determines whether provisioned autoscale should be automatically enabled."
+            }
+        }
+    },
+    "variables": {
+        "autoscaleName": "[concat(toLower(parameters('aspName')), '-autoscale')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "name": "[parameters('aspName')]",
+            "kind": "[parameters('aspKind')]",
+            "apiVersion": "2020-12-01",
+            "location": "[parameters('aspLocation')]",
+            "sku": {
+                "name": "[parameters('aspSkuName')]",
+                "tier": "[parameters('aspSkuTier')]",
+                "capacity": "[parameters('aspSkuCapacity')]"
+            },
+            "properties": {
+                "name": "[parameters('aspName')]"
+            }
+        },
+        {
+            "type": "Microsoft.Insights/autoscalesettings",
+            "name": "[variables('autoscaleName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('aspName'))]"
+            ],
+            "apiVersion": "2015-04-01",
+            "location": "[parameters('aspLocation')]",
+            "properties": {
+                "profiles": [
+                    {
+                        "name": "DefaultAutoscaleProfile",
+                        "capacity": {
+                            "minimum": "[parameters('autoscaleMinimumCapacity')]",
+                            "maximum": "[parameters('autoscaleMaximumCapacity')]",
+                            "default": "[parameters('autoscaleDefaultCapacity')]"
+                        },
+                        "rules": [
+                            {
+                                "metricTrigger": {
+                                    "metricName": "MemoryPercentage",
+                                    "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', parameters('aspName'))]",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "[parameters('memoryRuleTimeWindow')]",
+                                    "timeAggregation": "Average",
+                                    "operator": "GreaterThan",
+                                    "threshold": "[parameters('memoryRuleIncreaseThreshold')]"
+                                },
+                                "scaleAction": {
+                                    "direction": "Increase",
+                                    "type": "ChangeCount",
+                                    "value": "[parameters('memoryRuleIncreaseBy')]",
+                                    "cooldown": "[parameters('memoryRuleCooldown')]"
+                                }
+                            },
+                            {
+                                "metricTrigger": {
+                                    "metricName": "CpuPercentage",
+                                    "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', parameters('aspName'))]",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "[parameters('cpuRuleTimeWindow')]",
+                                    "timeAggregation": "Average",
+                                    "operator": "GreaterThan",
+                                    "threshold": "[parameters('cpuRuleIncreaseThreshold')]"
+                                },
+                                "scaleAction": {
+                                    "direction": "Increase",
+                                    "type": "ChangeCount",
+                                    "value": "[parameters('cpuRuleIncreaseBy')]",
+                                    "cooldown": "[parameters('cpuRuleCooldown')]"
+                                }
+                            },
+                            {
+                                "metricTrigger": {
+                                    "metricName": "MemoryPercentage",
+                                    "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', parameters('aspName'))]",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "[parameters('memoryRuleTimeWindow')]",
+                                    "timeAggregation": "Average",
+                                    "operator": "LessThan",
+                                    "threshold": "[parameters('memoryRuleDecreaseThreshold')]"
+                                },
+                                "scaleAction": {
+                                    "direction": "Decrease",
+                                    "type": "ChangeCount",
+                                    "value": "[parameters('memoryRuleDecreaseBy')]",
+                                    "cooldown": "[parameters('memoryRuleCooldown')]"
+                                }
+                            },
+                            {
+                                "metricTrigger": {
+                                    "metricName": "CpuPercentage",
+                                    "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', parameters('aspName'))]",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "[parameters('cpuRuleTimeWindow')]",
+                                    "timeAggregation": "Average",
+                                    "operator": "LessThan",
+                                    "threshold": "[parameters('cpuRuleDecreaseThreshold')]"
+                                },
+                                "scaleAction": {
+                                    "direction": "Decrease",
+                                    "type": "ChangeCount",
+                                    "value": "[parameters('cpuRuleDecreaseBy')]",
+                                    "cooldown": "[parameters('cpuRuleCooldown')]"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "enabled": "[parameters('enableAutoscale')]",
+                "targetResourceUri": "[resourceId('Microsoft.Web/serverFarms/', parameters('aspName'))]"
+            }
+        }
+    ]
+}

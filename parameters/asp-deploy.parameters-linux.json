@@ -1,0 +1,72 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aspName": {
+            "value": "test-asp02"
+        },
+        "aspKind": {
+            "value": "linux" 
+        },
+        "aspLocation": {
+            "value": "westeurope" 
+        },
+        "aspSkuName": {
+            "value": "s1" 
+        },
+        "aspSkuTier": {
+            "value": "Standard"
+        },
+        "aspSkuCapacity": {
+            "value": 1
+        },
+        "autoscaleMinimumCapacity": {
+            "value": 1
+        },
+        "autoscaleMaximumCapacity": {
+            "value": 4
+        },
+        "autoscaleDefaultCapacity": {
+            "value": 1
+        },
+        "memoryRuleTimeWindow": {
+            "value": "PT10M"
+        },
+        "memoryRuleCooldown": {
+            "value": "PT10M"
+        },
+        "memoryRuleIncreaseBy": {
+            "value": 1
+        },
+        "memoryRuleIncreaseThreshold": {
+            "value": 80
+        },
+        "memoryRuleDecreaseBy": {
+            "value": 1
+        },
+        "memoryRuleDecreaseThreshold": {
+            "value": 60
+        },
+        "cpuRuleCooldown": {
+            "value": "PT10M"
+        },
+        "cpuRuleTimeWindow": {
+            "value": "PT10M"
+        },
+        "cpuRuleIncreaseBy": {
+            "value": 1
+        },
+        "cpuRuleIncreaseThreshold": {
+            "value": 80
+        },
+        "cpuRuleDecreaseBy": {
+            "value": 1
+        },
+        "cpuRuleDecreaseThreshold": {
+            "value": 60
+        },
+        "enableAutoscale": {
+            "value": true 
+        }
+    }
+}

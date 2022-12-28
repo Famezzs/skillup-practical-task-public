@@ -31,7 +31,7 @@ if ( $nsgName )
 
 if ( $delegationServiceName )
 {
-    $delegationSpecified = New-AzDelegation -Name "serverFarmsDelegation" -ServiceName "Microsoft.Web/serverfarms"
+    $delegationSpecified = New-AzDelegation -Name "serviceDelegation" -ServiceName $delegationServiceName
 }
 
 Add-AzVirtualNetworkSubnetConfig -Name $subnetName `
