@@ -22,8 +22,6 @@ function outputValuesDifferError {
 
 $webappToValidate = Set-AzWebApp -Name $webappName -ResourceGroupName $webappResourceGroupName
 
-Write-Output $webappToValidate
-
 if ($null -eq $webappToValidate) {
     Write-Error 'WebApp specified could not be found.'
     exit 1
@@ -54,6 +52,14 @@ if ($webappToValidate.ServerFarmId -ne $aspResourceId) {
     outputValuesDifferError -parameterName 'WebApp Associate ASP' `
         -expectedValue $aspResourceId `
         -actualValue $webappToValidate.ServerFarmId
+}
+
+$webappCurrentStack = $webappToValidate.SiteConfig.MetaData.Where({($_.Name -eq 'CURRENT_STACK')}, 'First')
+
+if ($webappCurrentStack.value -ne $deploymentParameters.webappCurrentStack.value) {
+    outputValuesDifferError -parameterName 'WebApp Current Stack' `
+        -expectedValue $deploymentParameters.webappCurrentStack.value `
+        -actualValue $webappCurrentStack.value
 }
 
 if ($webappToValidate.SiteConfig.ManagedPipelineMode -ne $deploymentParameters.webappManagedPipelineMode.value) {
