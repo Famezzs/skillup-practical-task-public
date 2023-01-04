@@ -216,7 +216,6 @@ if ($autoscaleToValidate.Enabled -ne $deploymentParameters.enableAutoscale.value
 
 if ($totalErrorCount -eq 0) {
     Write-Output 'Successfully validated the resource. No errors encountered.'
-    exit 0
 } else {
     Write-Output "There were errors encountered during the validation process. Total error count: $totalErrorCount."
     exit 1

@@ -172,7 +172,8 @@
                 "capacity": "[parameters('aspSkuCapacity')]"
             },
             "properties": {
-                "name": "[parameters('aspName')]"
+                "name": "[parameters('aspName')]",
+                "reserved": "[if(equals(parameters('aspKind'), 'linux'), json('true'), json('false'))]"
             }
         },
         {

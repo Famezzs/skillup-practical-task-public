@@ -84,6 +84,9 @@ resource asp 'Microsoft.Web/serverfarms@2020-12-01' = {
     tier: aspSkuTier
     capacity: aspSkuCapacity
   }
+  properties: {
+    reserved: aspKind == 'linux' ? true : false
+  }
 }
 
 resource autoscale 'Microsoft.Insights/autoscalesettings@2015-04-01' = {

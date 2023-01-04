@@ -51,7 +51,11 @@
             "value": false
         },
         "webappIpRestrictions": {
-            "value": []
+            "value": [
+                {
+                    "ipAddress": "94.178.125.163/32"
+                }
+            ]
         },
         "webappNetFrameworkVersion": {
             "value": ""
@@ -60,7 +64,7 @@
             "value": ""
         },
         "webappLinuxFrameworkVersion": {
-            "value": "JAVA|11.0"
+            "value": "JAVA|11-java11"
         },
         "webappNodeVersion": {
             "value": ""
