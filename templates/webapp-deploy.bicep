@@ -68,9 +68,7 @@ param webappNetFrameworkVersion string
 param appInsightsName string
 
 @description('Name of the resource group where the App Insights the web app should be connected to resides.')
-@minLength(3)
-@maxLength(24)
-param appInsightsResourceGroupName string
+param appInsightsResourceGroupName string = resourceGroup().name
 
 @description('Name of the vnet which contains the subnet specified by \'vnetSubnetName\' that will be used for vnet integration of the webapp.')
 @minLength(3)

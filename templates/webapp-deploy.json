@@ -126,8 +126,7 @@
         },
         "appInsightsResourceGroupName": {
             "type": "string",
-            "minLength": 3,
-            "maxLength": 24,
+            "defaultValue": "[resourceGroup().name]",
             "metadata": {
                 "description": "Name of the resource group where the App Insights the web app should be connected to resides."
             }

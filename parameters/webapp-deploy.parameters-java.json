@@ -74,10 +74,10 @@
             "value": ""
         },
         "appInsightsName": {
-            "value": "test-appins01"
+            "value": ""
         },
         "appInsightsResourceGroupName": {
-            "value": "test-rg01"
+            "value": ""
         },
         "vnetName": {
             "value": "test-vnet01"
