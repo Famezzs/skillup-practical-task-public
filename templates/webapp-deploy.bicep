@@ -76,8 +76,6 @@ param appInsightsResourceGroupName string = resourceGroup().name
 param vnetName string
 
 @description('Specifies the resource group in which the vnet specified by \'vnetName\' resides. Default value: the resource group into which the webapp is being deployed.')
-@minLength(3)
-@maxLength(24)
 param vnetResourceGroup string = resourceGroup().name
 
 @description('Specifies the name of subnet which will be used for vnet integration of the webapp being deployed.')

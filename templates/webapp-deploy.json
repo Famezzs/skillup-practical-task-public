@@ -141,8 +141,6 @@
         },
         "vnetResourceGroup": {
             "type": "string",
-            "minLength": 3,
-            "maxLength": 24,
             "defaultValue": "[resourceGroup().name]",
             "metadata": {
                 "description": "Specifies the resource group in which the vnet specified by 'vnetName' resides. Default value: the resource group into which the webapp is being deployed."
