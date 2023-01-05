@@ -9,7 +9,7 @@
             "value": "test-rg01"
         },
         "webappName": {
-            "value": "test-wapp01-9f3ed10c-c29"
+            "value": "test-wapp01"
         },
         "webappLocation": {
             "value": "westeurope"
@@ -51,10 +51,12 @@
             "value": false
         },
         "webappIpRestrictions": {
-            "value": []
+            "value": [
+                
+            ]
         },
         "webappNetFrameworkVersion": {
-            "value": "6.0"
+            "value": "v6.0"
         },
         "webappJavaVersion": {
             "value": ""
@@ -73,6 +75,9 @@
         },
         "appInsightsName": {
             "value": "test-appins01"
+        },
+        "appInsightsResourceGroupName": {
+            "value": "test-rg01"
         },
         "vnetName": {
             "value": "test-vnet01"

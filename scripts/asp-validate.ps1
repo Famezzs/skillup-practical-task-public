@@ -1,10 +1,7 @@
 #Requires -Version 3.0
 
 Param(
-    [string] [Parameter(Mandatory=$true)] $aspName,
-    [string] [Parameter(Mandatory=$true)] $aspResourceGroupName,
-    [string] [Parameter(Mandatory=$true)] $autoscaleName,
-    [string] [Parameter(Mandatory=$true)] $autoscaleResourceGroupName,
+    [string] [Parameter(Mandatory=$true)] $deploymentResourceGroupName,
     [string] [Parameter(Mandatory=$true)] $deploymentParametersPath
 )
 
@@ -22,15 +19,6 @@ function outputValuesDifferError {
     Write-Error "$parameterName '$actualValue' does not equal $parameterName '$expectedValue' from parameters file."
 }
 
-$aspToValidate = Get-AzResource -Name $aspName `
-    -ResourceType 'Microsoft.Web/serverfarms' `
-    -ResourceGroupName $aspResourceGroupName
-
-if ($null -eq $aspToValidate) {
-    Write-Error 'ASP specified could not be found.'
-    exit 1
-}
-
 $deploymentParameters = (Get-Content $deploymentParametersPath | ConvertFrom-Json).parameters
 
 if ($null -eq $deploymentParameters) {
@@ -38,11 +26,13 @@ if ($null -eq $deploymentParameters) {
     exit 1
 }
 
-if ($aspToValidate.Name -ne $deploymentParameters.aspName.value) {
-    outputValuesDifferError -parameterName 'ASP Name' `
-        -expectedValue $deploymentParameters.aspName.value `
-        -actualValue $aspToValidate.Name
-    
+$aspToValidate = Get-AzResource -Name $deploymentParameters.aspName.value `
+    -ResourceType 'Microsoft.Web/serverfarms' `
+    -ResourceGroupName $deploymentResourceGroupName
+
+if ($null -eq $aspToValidate) {
+    Write-Error "ASP '$($deploymentParameters.aspName.value)' could not be found."
+    exit 1
 }
 
 if ($aspToValidate.Kind -ne $deploymentParameters.aspKind.value) {
@@ -77,9 +67,9 @@ if ($aspToValidate.Sku.Capacity -ne $deploymentParameters.aspSkuCapacity.value) 
         -actualValue $aspToValidate.Sku.Capacity
 }
 
-$autoscaleToValidate = (Get-AzResource -Name $autoscaleName `
+$autoscaleToValidate = (Get-AzResource -Name "$($deploymentParameters.aspName.value)-autoscale" `
     -ResourceType 'Microsoft.Insights/autoscalesettings' `
-    -ResourceGroupName $autoscaleResourceGroupName).Properties
+    -ResourceGroupName $deploymentResourceGroupName).Properties
     
 if ($null -eq $autoscaleToValidate) {
     Write-Error 'Autoscale specified could not be found.'

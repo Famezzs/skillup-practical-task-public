@@ -16,7 +16,7 @@ param webappName string
 @description('Location for a webapp.')
 param webappLocation string = resourceGroup().location
 
-@description('Determines the currently running code stack (e.g. dotnet, java, etc.)')
+@description('Determines the currently running code stack for a Windows web app (e.g. dotnet, java, etc.)')
 param webappCurrentStack string
 
 @allowed([
@@ -67,6 +67,11 @@ param webappNetFrameworkVersion string
 @description('If provided, the webapp will be connected to the app insights specified by \'appInsightsName\'.')
 param appInsightsName string
 
+@description('Name of the resource group where the App Insights the web app should be connected to resides.')
+@minLength(3)
+@maxLength(24)
+param appInsightsResourceGroupName string
+
 @description('Name of the vnet which contains the subnet specified by \'vnetSubnetName\' that will be used for vnet integration of the webapp.')
 @minLength(3)
 @maxLength(24)
@@ -101,11 +106,11 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: (empty(appInsightsName) ? json('null') : reference('microsoft.insights/components/${appInsightsName}', '2015-05-01').InstrumentationKey)
+          value: (empty(appInsightsName) ? json('null') : reference(resourceId(appInsightsResourceGroupName, 'Microsoft.Insights/components', appInsightsName), '2015-05-01').InstrumentationKey)
         }
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: (empty(appInsightsName) ? json('null') : reference('microsoft.insights/components/${appInsightsName}', '2015-05-01').ConnectionString)
+          value: (empty(appInsightsName) ? json('null') : reference(resourceId(appInsightsResourceGroupName, 'Microsoft.Insights/components', appInsightsName), '2015-05-01').ConnectionString)
         }
       ]
       metadata: [

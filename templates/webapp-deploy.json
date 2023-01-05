@@ -36,7 +36,7 @@
         "webappCurrentStack": {
             "type": "string",
             "metadata": {
-                "description": "Determines the currently running code stack (e.g. dotnet, java, etc.)"
+                "description": "Determines the currently running code stack for a Windows web app (e.g. dotnet, java, etc.)"
             }
         },
         "webappManagedPipelineMode": {
@@ -124,6 +124,14 @@
                 "description": "If provided, the webapp will be connected to the app insights specified by 'appInsightsName'."
             }
         },
+        "appInsightsResourceGroupName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24,
+            "metadata": {
+                "description": "Name of the resource group where the App Insights the web app should be connected to resides."
+            }
+        },
         "vnetName": {
             "type": "string",
             "minLength": 3,
@@ -178,7 +186,7 @@
                             "value": "[
                                 if(empty(parameters('appInsightsName')),
                                 json('null'),
-                                reference(concat('microsoft.insights/components/', parameters('appInsightsName')), '2015-05-01').InstrumentationKey)
+                                reference(resourceId(parameters('appInsightsResourceGroupName'), 'microsoft.insights/components/', parameters('appInsightsName')), '2015-05-01').InstrumentationKey)
                             ]"
                         },
                         {
@@ -186,7 +194,7 @@
                             "value": "[
                                 if(empty(parameters('appInsightsName')),
                                 json('null'),
-                                reference(concat('microsoft.insights/components/', parameters('appInsightsName')), '2015-05-01').ConnectionString)
+                                reference(resourceId(parameters('appInsightsResourceGroupName'), 'microsoft.insights/components/', parameters('appInsightsName')), '2015-05-01').ConnectionString)
                             ]"
                         }
                     ],

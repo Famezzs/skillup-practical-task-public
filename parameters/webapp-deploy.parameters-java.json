@@ -9,7 +9,7 @@
             "value": "test-rg01"
         },
         "webappName": {
-            "value": "test-wapp02-9f3ed10c-c29"
+            "value": "test-wapp02"
         },
         "webappLocation": {
             "value": "westeurope"
@@ -52,9 +52,7 @@
         },
         "webappIpRestrictions": {
             "value": [
-                {
-                    "ipAddress": "94.178.125.163/32"
-                }
+                
             ]
         },
         "webappNetFrameworkVersion": {
@@ -77,6 +75,9 @@
         },
         "appInsightsName": {
             "value": "test-appins01"
+        },
+        "appInsightsResourceGroupName": {
+            "value": "test-rg01"
         },
         "vnetName": {
             "value": "test-vnet01"

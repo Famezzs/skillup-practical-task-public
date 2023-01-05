@@ -1,8 +1,7 @@
 #Requires -Version 3.0
 
 Param(
-    [string] [Parameter(Mandatory=$true)] $webappName,
-    [string] [Parameter(Mandatory=$true)] $webappResourceGroupName,
+    [string] [Parameter(Mandatory=$true)] $deploymentResourceGroupName,
     [string] [Parameter(Mandatory=$true)] $deploymentParametersPath
 )
 
@@ -20,19 +19,18 @@ function outputValuesDifferError {
     Write-Error "$parameterName '$actualValue' does not equal $parameterName '$expectedValue' from parameters file."
 }
 
-$webappToValidate = Set-AzWebApp -Name $webappName -ResourceGroupName $webappResourceGroupName
+$deploymentParameters = (Get-Content $deploymentParametersPath | ConvertFrom-Json).parameters
 
-if ($null -eq $webappToValidate) {
-    Write-Error 'WebApp specified could not be found.'
+if ($null -eq $deploymentParameters) {
+    Write-Error 'Deployment file specified could not be found.'
     exit 1
 }
 
-$deploymentParameters = (Get-Content $deploymentParametersPath | ConvertFrom-Json).parameters
+$webappToValidate = Set-AzWebApp -Name $deploymentParameters.webappName.value -ResourceGroupName $deploymentResourceGroupName
 
-if ($webappToValidate.Name -ne $deploymentParameters.webappName.value) {
-    outputValuesDifferError -parameterName 'WebApp Name' `
-        -expectedValue $deploymentParameters.aspName.value `
-        -actualValue $aspToValidate.Name
+if ($null -eq $webappToValidate) {
+    Write-Error "WebApp '$($deploymentParameters.webappName.value)' could not be found."
+    exit 1
 }
 
 $webappActualLocation = $webappToValidate.Location.Replace(' ', '')
@@ -121,23 +119,35 @@ if ($webappToValidate.SiteConfig.VnetRouteAllEnabled -ne $deploymentParameters.w
         -actualValue $webappToValidate.SiteConfig.VnetRouteAllEnabled
 }
 
-
-if ($webappToValidate.SiteConfig.IpSecurityRestrictions.Count -ne 0 -and $deploymentParameters.webappIpRestrictions.value.Count -ne 0) {
-
+$atLeastOneIpRestrictionsArrayHasCustomRules = $webappToValidate.SiteConfig.IpSecurityRestrictions.Count -gt 1 -or $deploymentParameters.webappIpRestrictions.value.Count -gt 0 
+if ($atLeastOneIpRestrictionsArrayHasCustomRules) {
     $webappIpRestrictionsAreValid = $true
 
-    if ($webappToValidate.SiteConfig.IpSecurityRestrictions.Count -ne $deploymentParameters.webappIpRestrictions.value.Count) {
-        $webappIpRestrictionsAreValid = $false
-    }
+    $ipRestrictionsAreProvidedDuringDeployment = $deploymentParameters.webappIpRestrictions.value.Count -gt 0 
+    if ($ipRestrictionsAreProvidedDuringDeployment) {
+        $robustDefinitions = @()
 
-    for ($index = 0; $index -lt $deploymentParameters.webappIpRestrictions.value.Count -and $webappIpRestrictionsAreValid; $index++) {
-        $webappIpRestrictionsAreValid = $webappToValidate.SiteConfig.IpSecurityRestrictions -contains $deploymentParameters.webappIpRestrictions[$index]
+        foreach ($expectedRestriction in $deploymentParameters.webappIpRestrictions.value) {
+            $robustDefinitions += New-Object -TypeName psobject -Property @{
+                IpAddress = $expectedRestriction.ipAddress
+                Action = if ($expectedRestriction.action) {$expectedRestriction.action} else {'Allow'}        
+            }
+        }
+
+        foreach ($expectedRestriction in $robustDefinitions) {
+            if (-not ($webappToValidate.SiteConfig.IpSecurityRestrictions.Where({$_.IpAddress -eq $expectedRestriction.IpAddress -and $_.Action -eq $expectedRestriction.Action}, 'First'))) {
+                $webappIpRestrictionsAreValid = $false
+                break
+            }
+        }    
+    } else {
+        $webappIpRestrictionsAreValid = $false
     }
 
     if (-not $webappIpRestrictionsAreValid) {
         outputValuesDifferError -parameterName 'WebApp Ip Restrictions' `
-            -expectedValue $deploymentParameters.webappIpRestrictions.value `
-            -actualValue $webappToValidate.SiteConfig.IpSecurityRestrictions
+            -expectedValue $(ConvertTo-Json $deploymentParameters.webappIpRestrictions.value)`
+            -actualValue $(ConvertTo-Json $webappToValidate.SiteConfig.IpSecurityRestrictions)
     }
 }
 
@@ -193,7 +203,7 @@ $actualAppInsightsConnectionString = $webappToValidate.SiteConfig.AppSettings.Wh
 
 if ($deploymentParameters.appInsightsName.value) {
     $webappExpectedAppInsights = Get-AzApplicationInsights -Name $deploymentParameters.appInsightsName.value `
-        -ResourceGroupName $webappToValidate.ResourceGroup
+    -ResourceGroupName $deploymentParameters.appInsightsResourceGroupName.value
 
     if ($actualAppInsightsKey.Value -ne $webappExpectedAppInsights.InstrumentationKey) {
         outputValuesDifferError -parameterName 'WebApp App Insights Instrumentation Key' `
